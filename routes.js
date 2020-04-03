@@ -9,6 +9,15 @@ module.exports = function(app) {
     app.route('/users')
         .get(todoList.users);
 
+    app.route('/users/login')
+        .get(todoList.login);
+
+    app.route('/users/register')
+        .post(todoList.register);
+
+    app.route('/users/verify')
+        .get(todoList.verify);
+
     // app.route('/alamat')
     //     .get(todoList.alamat);
 
