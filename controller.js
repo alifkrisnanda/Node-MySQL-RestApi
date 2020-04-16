@@ -5,7 +5,7 @@ const connection = require('./conn');
 const jwt = require('jsonwebtoken')
 
 exports.users = function(req, res) {
-let base_url = `SELECT person.id, person.first_name, person.last_name, alamat.asal_kota FROM person LEFT JOIN alamat ON person.id = alamat.id_user`
+let base_url = `SELECT person.id, person.first_name, person.last_name, person.usia, alamat.asal_kota FROM person LEFT JOIN alamat ON person.id = alamat.id_user`
 	
 	const {search} = req.query
 if(search && search.length>0){
@@ -157,3 +157,61 @@ exports.verify = function(req, res) {
 	  
 	  res.status(200).send(decoded); }); };
   
+
+exports.total = function(req, res) {
+	let username = req.body.username;
+ 	
+	connection.query('SELECT COUNT(username) FROM person',
+	[ username ],
+	function (error, rows){
+	if (error){
+		console.log(error)
+ 	} else {
+		response.ok("Berhasil menghitung users!", rows)
+		console.log()
+	}
+	});
+};
+
+exports. = function(req, res) {
+	let usia = req.body.batahAtas
+let usia = req.body.batasBawah
+
+	connection.query (`SELECT * FROM person WHERE usia BETWEEN 0 AND ?`,
+	[ usia ],
+	function (error, rows, fields){
+		if(error){
+			console.log(error)
+		} else {
+			response.ok("Berhasil!", res)
+			console.log()
+		}
+	});
+};
+
+exports.rata = function (req, res){
+	let usia = req.body.usia
+
+	connection.query('SELECT AVG (usia) FROM person',
+	[usia],
+	function (error, rows, fields){
+		if(error){
+			console.log(error)
+		} else {
+			response.ok("Berhasil mengitung rata-rata!", res)
+		}
+	});
+};
+
+exports.asc = function (req, res) {
+	let username = req.body.username
+
+	connection.query('SELECT AVG (username) FROM person', [ username ],
+	function (error, rows, fields){
+		if(error){
+			console.log(error)
+		} else {
+			response.ok("Berhasil sort user by name", res)
+		}
+	});
+};

@@ -9,6 +9,12 @@ module.exports = function(app) {
     app.route('/users')
         .get(todoList.users);
 
+    app.route('/users/asc')
+        .put(todoList.asc)
+
+    // app.route('/users/usia')
+    //     .get(todoList.batasatas);
+
     app.route('/users/login')
         .get(todoList.login);
 
@@ -17,6 +23,15 @@ module.exports = function(app) {
 
     app.route('/users/verify')
         .get(todoList.verify);
+
+    app.route('/users/total')
+        .get(todoList.total);
+
+    app.route('users/avg')
+        .get(todoList.rata)
+
+    // app.route('/users/total')
+    //     .get(todoList.batasAtas);
 
     // app.route('/alamat')
     //     .get(todoList.alamat);
