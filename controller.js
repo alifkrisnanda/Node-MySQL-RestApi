@@ -10,7 +10,19 @@ let base_url = `SELECT person.id, person.first_name, person.last_name, person.us
 	const {search} = req.query
 if(search && search.length>0){
 	base_url += ` WHERE first_name LIKE '%${search}%' OR last_name LIKE '%${search}%'`
-}
+} 
+	const sortby = req.body.sortby || 'first_name'
+	const order = req.body.order || 'ASC'
+
+	base_url += ` ORDER BY ${sortby} ${order}`
+
+	const limit = parseInt(req.body.limit) || 10
+	const page = parseInt(req.body.page) || 1
+	const offset = (page-1)*limit	
+	base_url += ` LIMIT ${limit} OFFSET ${offset}`
+	console.log(limit)
+	console.log(page)
+
 console.log(base_url)
 
 connection.query(base_url, function (error, rows, fields){
@@ -159,59 +171,33 @@ exports.verify = function(req, res) {
   
 
 exports.total = function(req, res) {
-	let username = req.body.username;
- 	
-	connection.query('SELECT COUNT(username) FROM person',
-	[ username ],
+	let batasAtas = req.body.batasAtas || 100
+	let batasBawah = req.body.batasBawah || 0
+	
+	connection.query('SELECT COUNT(username) FROM person WHERE usia < ? AND usia > ?',
+	[ batasAtas, batasBawah ],
 	function (error, rows){
 	if (error){
-		console.log(error)
+		console.log(error)	
  	} else {
-		response.ok("Berhasil menghitung users!", rows)
-		console.log()
+		response.ok(rows, res)
+		console.log(rows)
 	}
 	});
 };
 
-exports. = function(req, res) {
-	let usia = req.body.batahAtas
-let usia = req.body.batasBawah
 
-	connection.query (`SELECT * FROM person WHERE usia BETWEEN 0 AND ?`,
-	[ usia ],
-	function (error, rows, fields){
-		if(error){
-			console.log(error)
-		} else {
-			response.ok("Berhasil!", res)
-			console.log()
-		}
-	});
-};
 
 exports.rata = function (req, res){
-	let usia = req.body.usia
 
 	connection.query('SELECT AVG (usia) FROM person',
-	[usia],
-	function (error, rows, fields){
+	function (error, rows){
 		if(error){
 			console.log(error)
 		} else {
-			response.ok("Berhasil mengitung rata-rata!", res)
+			response.ok(rows, res)
+			console.log(rows)
 		}
 	});
 };
 
-exports.asc = function (req, res) {
-	let username = req.body.username
-
-	connection.query('SELECT AVG (username) FROM person', [ username ],
-	function (error, rows, fields){
-		if(error){
-			console.log(error)
-		} else {
-			response.ok("Berhasil sort user by name", res)
-		}
-	});
-};

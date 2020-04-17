@@ -9,9 +9,9 @@ module.exports = function(app) {
     app.route('/users')
         .get(todoList.users);
 
-    app.route('/users/asc')
-        .put(todoList.asc)
-
+    // app.route('/users/asc')
+    //     .put(todoList.asc)
+ 
     // app.route('/users/usia')
     //     .get(todoList.batasatas);
 
@@ -27,14 +27,8 @@ module.exports = function(app) {
     app.route('/users/total')
         .get(todoList.total);
 
-    app.route('users/avg')
+    app.route('/users/rata')
         .get(todoList.rata)
-
-    // app.route('/users/total')
-    //     .get(todoList.batasAtas);
-
-    // app.route('/alamat')
-    //     .get(todoList.alamat);
 
     app.route('/users/:user_id')
         .get(todoList.findUsers);
